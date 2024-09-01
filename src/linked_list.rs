@@ -103,6 +103,8 @@ impl<T> LinkedList<T> {
         self.iter().any(|item| item == &element)
     }
 
+
+    // inserting a node at a specific position in list.
     pub fn insert(&mut self, pos: usize, data: T) {
         if pos == 0 {
             return self.push(data);
