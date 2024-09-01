@@ -1,3 +1,5 @@
+// binary tree module
+
 use std::vec;
 
 #[derive(Debug)]
