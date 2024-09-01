@@ -1,6 +1,6 @@
 // binary tree module
 
-use std::vec;
+use std::{collections::VecDeque, vec};
 
 #[derive(Debug)]
 struct Tree {
@@ -35,6 +35,41 @@ impl Tree{
         Tree {
             root: None,
         }
+    }
+
+    fn level_order_traversal(&self) -> Vec<i32> {
+        if self.root.is_none(){
+            return Vec::new();
+        }
+
+        let mut results: Vec<i32> = Vec::new();
+        let mut q: VecDeque<&Box<Node>> = VecDeque::new();
+        let root = self.root.as_ref().unwrap();
+        results.push(root.value);
+        q.push_back(root);
+
+
+        let mut height = 0;
+        while !q.is_empty(){
+            for i in 0..q.len(){
+                if let Some(node) = q.pop_front(){
+                    if let Some(ref left) = node.left_node{
+                        results.push(left.value);
+                        q.push_back(left);
+                    }
+                    if let Some(ref right) = node.right_node{
+                        results.push(right.value);
+                        q.push_back(right);
+                    }
+                }
+            }
+
+            height += 1;
+        }
+
+        println!("Height: {height}");
+
+        results
     }
 
     fn insert(&mut self, value: i32) {
@@ -118,8 +153,23 @@ mod tests {
         tree.insert(6);
         tree.insert(1);
         tree.insert(4);
-
+        
         assert_eq!(tree.root.is_some(), true);
         println!("{:?}", tree);
+    }
+
+    #[test]
+    fn works_build_level_traversal() {
+        let mut tree = Tree::new();
+        tree.insert(8);
+        tree.insert(10);
+        tree.insert(3);
+        tree.insert(12);
+        tree.insert(6);
+        tree.insert(1);
+        tree.insert(4);
+
+
+        assert_eq!(tree.level_order_traversal(), vec![8, 3, 10, 1, 6, 12, 4]);
     }
 }
